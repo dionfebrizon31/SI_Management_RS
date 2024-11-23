@@ -32,8 +32,9 @@
                     {{ $tittle }}
                 </p>
 
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addjabatans">Add
-                    Karywan</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addjabatans">
+
+                    <i class="mdi mdi-plus"></i>jabatan</button>
 
                 <x-modaldinamis id="addjabatans" tittle="Add Jabatan" size="modal-lg">
                     <form action="/data/jabatans/tambah" method="post">
@@ -88,16 +89,7 @@
 
                     </tbody>
                 </table>
-                <div class="table-pagination">
-                    <div class="flex items-center justify-between">
-                        <div class="buttons">
-                            <button type="button" class="button active">1</button>
-                            <button type="button" class="button">2</button>
-                            <button type="button" class="button">3</button>
-                        </div>
-                        <small>Page 1 of 3</small>
-                    </div>
-                </div>
+
             </div>
         </div>
     </section>

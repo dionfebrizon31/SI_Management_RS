@@ -48,6 +48,7 @@
                             <label class="col-sm-2 col-form-label">Department</label>
                             <div class="col-sm-10 control select">
                                 <select name="jabatans">
+                                    <option value=""></option>
                                     @foreach ($jabatans as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
@@ -55,7 +56,7 @@
                             </div>
                         </div>
 
-
+                        @props(['type' => 'hidden']);
                         <input type="hidden" name="role" value="karyawans">
 
 

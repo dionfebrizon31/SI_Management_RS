@@ -19,6 +19,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app['url']->forceRootUrl(env('https://53b8-103-108-22-3.ngrok-free.app'));
     }
 }

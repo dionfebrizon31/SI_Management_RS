@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Jabatans;
-use App\Models\Jobdesk;
-use App\Models\Karyawan;
+use App\Models\Post;
 use App\Models\User;
+use App\Models\Jobdesk;
+use App\Models\Jabatans;
+use App\Models\Karyawan;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -145,7 +147,9 @@ class DashboardAdmin extends Controller
         //type adalah nama tabel
         //action adalah tambah,edit,delete
         //id adalah id tabel database
-        
+
+        // MERUPAKAN AREA LOKASI TABLE JABATAN DI KELOLA 
+
         if(auth::user()->role== 'admins' && $type ==  "jabatans" && $action == "tambah") {
             $validator = Validator::make($request->all(), [
                 'name' => 'required|unique:jabatans,name',
@@ -183,6 +187,8 @@ class DashboardAdmin extends Controller
                 $jabatan = Jabatans::find($id);
                 // Hapus record terkait di Jobdesk yang memiliki jabatans_id
                 Jobdesk::where('jabatans_id', $jabatan->id)->delete();
+                user::where('jabatans_id', $id)->update(['jabatans_id' => 0]);
+
                 $jabatanlagi = Jabatans::findOrFail($id);
                 // Setelah itu, hapus Jabatan
                 $jabatanlagi->delete();
@@ -193,6 +199,7 @@ class DashboardAdmin extends Controller
             }
         }
 
+        // MERUPAKAN AREA LOKASI TABLE Karyawan DI KELOLA 
 
         if(auth::user()->role== 'admins' && $type ==  "karyawans" && $action == "tambah")
         {
@@ -206,10 +213,10 @@ class DashboardAdmin extends Controller
             'password' => 'required',
             'nohp' => 'required',
             'alamat' => 'required',
-            'jabatans' => 'required']);
+            ]);
          
             if ($validator->fails()) {
-                return redirect('/karyawans')->with('gagal','Username atau email sudah ada'.$validator);
+                return redirect('/karyawans')->with('gagal','Username atau email sudah ada');
             }
             $User->email = $request->email;
             $User->name = $request->name;
@@ -257,7 +264,8 @@ class DashboardAdmin extends Controller
                 return response()->json(['error' => 'Failed to delete record.'], 500);
             }
         }
-
+    
+        // MERUPAKAN AREA LOKASI TABLE ADMINS DI KELOLA 
 
         if(auth::user()->role== 'admins' && $type ==  "admins" && $action == "tambah")
         {
@@ -265,7 +273,7 @@ class DashboardAdmin extends Controller
             $User->email = $request->email;
             $User->name = $request->name;
             $User->role = "admins";
-            $User->jabatans_id = 0 ;
+            $User->jabatans_id = $request->jabatans ?? null ;
             $User->username = $request->username;
             $User->password =  Hash::make($request->password);
             $User->save();
@@ -351,6 +359,73 @@ class DashboardAdmin extends Controller
                 return response()->json(['error' => 'Failed to delete record.'], 500);
             }
         }
+
+        // area untuk postingan
+        if(auth::user()->role== 'admins' && $type ==  "posts" && $action == "tambah") {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'deskripsi' => 'required',
+            ]);  
+            if ($validator->fails()) {
+               
+                return redirect('/'.$type)->with('gagal','Judul Sudah Ada  !!');
+            }
+            $post = new Post();
+            $post->title = $request->title;
+            $post->slug = Str::of($request->title)->slug('-');
+           
+            if ($request->input('status') == true) {
+                $status = "public";
+            } else {
+                $status = "private";
+            }
+   
+            $post->status = $status;
+            
+            $post->deskripsi = $request->deskripsi;
+            $post->save();
+            return redirect('/'.$type)->with('sukses','sukses menyimpan data postingan');
+        }
+      
+        else if(auth::user()->role== 'admins' && $type ==  "posts" && $action == "edit")
+        {
+            $post = Post::find($id);
+            
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'deskripsi' => 'required',
+            ]);  
+            if ($validator->fails()) {
+               
+                return redirect('/'.$type)->with('gagal','Judul Sudah Ada  !!');
+            }
+         
+            $post->title = $request->title;
+            $post->slug = Str::of($request->title)->slug('-');
+           
+            if ($request->input('status') == true) {
+                $status = "public";
+            } else {
+                $status = "private";
+            }
+            $post->status = $status;
+            
+            $post->deskripsi = $request->deskripsi;
+            $post->save();
+            return redirect('/'.$type)->with('sukses','sukses menyimpan data postingan');;
+        }
+          
+        else if(auth::user()->role== 'admins' && $type ==  "posts" && $action == "delete")
+        {
+            try {
+                $post = Post::findOrFail($id);
+                $post->delete();
+                return response()->json(['success' => 'Record deleted successfully.']);
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to delete record.'], 500);
+            }
+        }
+
 
 
         

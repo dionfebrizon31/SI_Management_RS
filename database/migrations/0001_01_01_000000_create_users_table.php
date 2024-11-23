@@ -20,10 +20,14 @@ return new class extends Migration
             $table->enum('role', ['karyawans', 'admins'])->default('karyawans');
             $table->string('nomorhp')->default('-');
             $table->string('alamat')->default('-');
-            $table->foreignId('jabatans_id')->constrained(
+            $table->foreignId('jabatans_id')
+            ->constrained(
                 table:'jabatans',
                 indexName: 'users_jabatans_id'
-            )->default('0');
+                )
+            ->default('0')
+            ->onDelete('set null')
+            ->nullable();
 
             $table->timestamp('email_verified_at')->nullable();
 

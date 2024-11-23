@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Jobdesk extends Model
 {
     public $timestamps = false;
+    
     public function jabatans():BelongsTo
     {
-
         return $this->BelongsTo(Jabatans::class);
     }
 }

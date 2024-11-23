@@ -18,11 +18,12 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Test User',
+            'email' => 'tests@gmail.com',
             'username' => '123',
             'role' => 'admins',
+            'nomorhp' => '123',
             'password' => Hash::make('123'),
             'jabatans_id' => '1',
-
         ]);
     }
 }

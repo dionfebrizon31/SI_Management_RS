@@ -5,12 +5,14 @@ use App\Models\Jabatans;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardAdmin;
 use App\Models\Jobdesk;
+use App\Models\Post;
 use PhpParser\Node\Scalar\MagicConst\Function_;
 use PHPUnit\TextUI\Configuration\Group;
 
 
 Route::get('/', function () {
-    return view('index');
+    $posts = Post::latest();
+    return view('index',['tittle' => 'Dashboard','posts'=>$posts]);
 });
 
 Route::get('/login', function () {
@@ -24,6 +26,8 @@ Route::get('/dashboard', function () {
 Route::get('/logout',[DashboardAdmin::class,'logout']);
 
 Route::middleware(['auth'])->group(function(){
+
+    
     // area admin
     Route::get('/jobdesk', function () {
         return view('dashboard.jobdesk',['tittle' => 'Job desk','karyawans'=> User::all()]);
@@ -52,7 +56,9 @@ Route::middleware(['auth'])->group(function(){
 
     ////////////////////////////  AREA ADMIN SETTING Admins     /////////////////////////////////////////////
     Route::get('/admins', function () {
-        return view('dashboard.dadmin',['tittle' => 'Admins','users'=> User::all()]);
+        $jabatans =  Jabatans::all();
+        $users = User::all();
+        return view('dashboard.dadmin',['tittle' => 'Admins','users'=> $users ,'jabatans'=>$jabatans ]);
     });
     Route::post('/admintambah',[DashboardAdmin::class,'tambahdata']);
     Route::post('/adminedit/{id}',[DashboardAdmin::class,'editdata']);
@@ -66,11 +72,14 @@ Route::middleware(['auth'])->group(function(){
         return view('dashboard.karyawans',['tittle' => 'karyawans','karyawans'=> $karyawans,'jabatans'=> $jabatans]);
     });
 
-    
-    // Route::post('//{type}/{action}',[DashboardAdmin::class,'data']);
-    // Route::post('/karyawanedit/{id}',[DashboardAdmin::class,'data']);
-    // Route::delete('/deletedata/{id}',[DashboardAdmin::class,'delete']);
-    //
+    Route::get('/posts', function () {
+        $posts = Post::latest()->get();
+        return view('dashboard.posts',[
+            'tittle' => 'Kelola Postingan',
+            'posts'=> $posts
+        ]);
+    });
+
 
 });
 

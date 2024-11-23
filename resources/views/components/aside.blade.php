@@ -38,12 +38,11 @@
             <li>
                 <a class="dropdown">
                     <span class="icon"><i class="mdi mdi-view-list"></i></span>
-                    <span class="menu-item-label">Data Induk</span>
+                    <span class="menu-item-label">Data Postingan</span>
                     <span class="icon"><i class="mdi mdi-plus"></i></span>
                 </a>
                 <ul>
-                    <x-aside-link href="/admins"> Data Admin</x-aside-link>
-                    <x-aside-link href="/karyawans"> Data Karyawan</x-aside-link>
+                    <x-aside-link href="/posts">Data Postingan</x-aside-link>
                 </ul>
             </li>
         </ul>

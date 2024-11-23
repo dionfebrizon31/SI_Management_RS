@@ -42,7 +42,17 @@
                         <x-formdinamis tittle="Nama" tipe="text" send="name"> </x-formdinamis>
                         <x-formdinamis tittle="username" tipe="text" send="username"> </x-formdinamis>
                         <x-formdinamis tittle="password" tipe="password" send="password"> </x-formdinamis>
-
+                        <div class="mb-3 row">
+                            <label class="col-sm-2 col-form-label">Department</label>
+                            <div class="col-sm-10 control select">
+                                <select name="jabatans">
+                                    <option value=""></option>
+                                    @foreach ($jabatans as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
 
                         <div class="d-flex justify-content-end gap-2">
@@ -102,11 +112,8 @@
                                     <td data-label="username">{{ $item['username'] }}</td>
                                     <td data-label="Nohp">{{ $item['nomorhp'] }}</td>
                                     <td data-label="alamat">{{ $item['alamat'] }}</td>
-                                    @if ($item->jabatan_id > -1)
-                                        <td data-label="jabatans">{{ $item->jabatans->name }}</td>
-                                    @else
-                                        <td data-label="jabatans">--</td>
-                                    @endif
+                                    <td data-label="alamat">{{ $item->jabatans->name }}</td>
+
 
                                     <td data-label="Created">
                                         <small class="text-gray-500"
@@ -160,6 +167,18 @@
                 </x-formdinamis>
                 <x-formdinamis tittle="Alamat" tipe="text" send="alamat" value="{{ $item['alamat'] }}">
                 </x-formdinamis>
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Department</label>
+                    <div class="col-sm-10 control select">
+                        <select name="jabatans">
+                            @foreach ($jabatans as $items)
+                                <option value="{{ $items->id }}"
+                                    {{ $items->id == $item->jabatans_id ? 'selected' : '' }}>
+                                    {{ $items->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 <input type="hidden" name="role" value="admins">
 
 
